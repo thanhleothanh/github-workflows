@@ -1,6 +1,12 @@
 name: 'Build Docker image'
 description: 'Build Docker image'
 
+inputs:
+  secret-github-token:
+    description: 'The secrets.GITHUB_TOKEN secret for logging into GHCR'
+    required: true
+    type: string
+
 runs:
   using: 'composite'
   steps:
@@ -12,7 +18,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.secret-github-token }}
 
     - name: Build Docker Image
       run: |
