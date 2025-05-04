@@ -49,6 +49,7 @@ jobs:
           retention-days: 1
 
   docker-image:
+    needs: [build-test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
