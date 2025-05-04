@@ -28,18 +28,18 @@ jobs:
 
       - name: Prepare Java dependencies
         id: prepare-java-maven
-        uses: ./.github/actions/prepare-java-maven
+        uses: thanhleothanh/github-workflows/.github/actions/prepare-java-maven@main
         with:
           java-version: ${{ inputs.java-version }}
           maven-version: ${{ inputs.maven-version }}
 
       - name: Build Java project
         id: build-java-maven
-        uses: ./.github/actions/build-java-maven
+        uses: thanhleothanh/github-workflows/.github/actions/build-java-maven@main
 
       - name: Test Java project
         id: test-java-maven
-        uses: ./.github/actions/test-java-maven
+        uses: thanhleothanh/github-workflows/.github/actions/test-java-maven@main
 
       - name: Upload build folder artifact
         uses: actions/upload-artifact@v4
@@ -63,4 +63,4 @@ jobs:
           path: ${{ inputs.build-folder }}
 
       - name: Build Docker image and push
-        uses: ./.github/actions/docker-image
+        uses: thanhleothanh/github-workflows/.github/actions/docker-image@main
