@@ -1,0 +1,1 @@
+if you wish to have a customer settings.xml file, you should place it here in this folder

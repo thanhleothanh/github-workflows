@@ -1,0 +1,19 @@
+name: 'Test Java with Maven'
+description: 'Test Java with Maven'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run unit tests
+      run: |
+        mvn test \
+        -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+        --batch-mode
+
+    - name: Publish test results
+      uses: dorny/test-reporter@v1
+      with:
+        name: Maven Tests
+        path: ./target/surefire-reports/*.xml
+        reporter: java-junit
+        fail-on-error: true

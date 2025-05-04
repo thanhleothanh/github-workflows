@@ -1,0 +1,65 @@
+name: Reusable Java + Maven Workflow
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'Java version to use'
+        required: false
+        default: '17'
+        type: string
+      maven-version:
+        description: 'Maven version to use'
+        required: false
+        default: '3.8.6'
+        type: string
+      build-folder:
+        description: 'Build folder output'
+        required: false
+        default: 'target'
+        type: string
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare Java dependencies
+        id: prepare-java-maven
+        uses: ./.github/actions/prepare-java-maven
+        with:
+          java-version: ${{ inputs.java-version }}
+          maven-version: ${{ inputs.maven-version }}
+
+      - name: Build Java project
+        id: build-java-maven
+        uses: ./.github/actions/build-java-maven
+
+      - name: Test Java project
+        id: test-java-maven
+        uses: ./.github/actions/test-java-maven
+
+      - name: Upload build folder artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.build-folder }}
+          path: ${{ inputs.build-folder }}
+          retention-days: 1
+
+  docker-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Download build folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.build-folder }}
+          path: ${{ inputs.build-folder }}
+
+      - name: Build Docker image and push
+        uses: ./.github/actions/docker-image

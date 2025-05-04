@@ -1,0 +1,8 @@
+name: 'Build Java with Maven'
+description: 'Build Java with Maven'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build with Maven
+      run: mvn -B clean package

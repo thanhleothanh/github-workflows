@@ -1,0 +1,38 @@
+name: 'Prepare Java dependencies'
+description: 'Prepare Java dependencies'
+
+inputs:
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '17'
+    type: string
+  maven-version:
+    description: 'Maven version to use'
+    required: false
+    default: '3.8.6'
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up JDK ${{ inputs.java-version }}
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: 'temurin'
+        cache: 'maven'
+
+    - name: Set up Maven ${{ inputs.maven-version }}
+      uses: stCarolas/setup-maven@v4.5
+      with:
+        maven-version: ${{ inputs.maven-version }}
+
+    - name: Setup custom Maven settings (if present)
+      working-directory: '.'
+      run: |
+        if [ -f "./maven/settings.xml" ]; then
+          echo "Custom ./maven/settings.xml found"
+          mkdir -p ~/.m2
+          cp ./maven/settings.xml ~/.m2/settings.xml
+        fi
