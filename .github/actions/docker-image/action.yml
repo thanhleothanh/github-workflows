@@ -39,7 +39,7 @@ runs:
         echo "Pushing Docker image $IMAGE_NAME_LOWERCASE:$IMAGE_TAG"
         docker push $IMAGE_NAME_LOWERCASE:$IMAGE_TAG
 
-        if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_BASE_REF" == "main" ]]; then
+        if [[ ${{ github.event_name }} == "push" && ${{ github.ref }} == "refs/heads/main" ]]; then
           echo "Trigger is push to main, pushing $IMAGE_NAME_LOWERCASE:latest"
           docker tag $IMAGE_NAME_LOWERCASE:$IMAGE_TAG $IMAGE_NAME_LOWERCASE:latest
           docker push $IMAGE_NAME_LOWERCASE:latest
