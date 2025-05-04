@@ -55,6 +55,10 @@ jobs:
       contents: read
       packages: write
 
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+      github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
+
     steps:
       - name: Download build folder artifact
         uses: actions/download-artifact@v4
