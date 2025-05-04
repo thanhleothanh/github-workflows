@@ -9,6 +9,7 @@ runs:
         mvn test \
         -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
         --batch-mode
+      shell: bash
 
     - name: Publish test results
       uses: dorny/test-reporter@v1

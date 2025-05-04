@@ -36,3 +36,4 @@ runs:
           mkdir -p ~/.m2
           cp ./maven/settings.xml ~/.m2/settings.xml
         fi
+      shell: bash
