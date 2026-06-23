@@ -85,5 +85,3 @@ jobs:
 
       - name: Build Docker image and push
         uses: thanhleothanh/github-workflows/.github/actions/docker-image@main
-        with:
-          secret-github-token: ${{ secrets.GITHUB_TOKEN }}
