@@ -18,6 +18,10 @@ runs:
         distribution: 'temurin'
         cache: 'gradle'
 
+    - name: Make Gradle wrapper executable
+      run: chmod +x ./gradlew
+      shell: bash
+
     - name: Setup custom Gradle configuration (if present)
       working-directory: '.'
       run: |

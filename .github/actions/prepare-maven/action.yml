@@ -18,6 +18,10 @@ runs:
         distribution: 'temurin'
         cache: 'maven'
 
+    - name: Make Maven wrapper executable
+      run: chmod +x ./mvnw
+      shell: bash
+
     - name: Setup custom Maven settings (if present)
       working-directory: '.'
       run: |

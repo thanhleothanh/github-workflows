@@ -5,3 +5,9 @@ Place custom Gradle configuration here:
 - `init.d/*.gradle` — each file copied to `~/.gradle/init.d/`
 
 This mirrors the `maven/settings.xml` pattern for adding company-specific endpoints or credentials.
+
+Ensure `gradlew` is executable in your repository:
+
+```bash
+git update-index --chmod=+x gradlew
+```

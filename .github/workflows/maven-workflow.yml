@@ -33,8 +33,9 @@ jobs:
 
       - name: Start infrastructure (if provided)
         if: ${{ inputs.infra-startup-script != '' }}
-        run: ${{ inputs.infra-startup-script }}
-        shell: bash
+        uses: thanhleothanh/github-workflows/.github/actions/run-script@main
+        with:
+          script: ${{ inputs.infra-startup-script }}
 
       - name: Prepare Maven dependencies
         id: prepare-maven
@@ -52,8 +53,9 @@ jobs:
 
       - name: Stop infrastructure (if provided)
         if: ${{ always() && inputs.infra-teardown-script != '' }}
-        run: ${{ inputs.infra-teardown-script }}
-        shell: bash
+        uses: thanhleothanh/github-workflows/.github/actions/run-script@main
+        with:
+          script: ${{ inputs.infra-teardown-script }}
 
       - name: Upload build folder artifact
         uses: actions/upload-artifact@v7

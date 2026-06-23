@@ -1,0 +1,17 @@
+name: 'Run Script'
+description: 'Make a script executable and run it'
+
+inputs:
+  script:
+    description: 'Full script to execute (first token is chmoded +x)'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run script
+      run: |
+        chmod +x ${{ inputs.script }}
+        ${{ inputs.script }}
+      shell: bash
