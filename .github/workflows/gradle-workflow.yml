@@ -1,4 +1,4 @@
-name: Reusable Java + Maven Workflow
+name: Reusable Gradle Workflow
 
 on:
   workflow_call:
@@ -8,15 +8,10 @@ on:
         required: false
         default: '17'
         type: string
-      maven-version:
-        description: 'Maven version to use'
-        required: false
-        default: '3.8.6'
-        type: string
       build-folder:
         description: 'Build folder output'
         required: false
-        default: 'target'
+        default: 'build'
         type: string
 
 jobs:
@@ -26,20 +21,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Prepare Java dependencies
-        id: prepare-java-maven
-        uses: thanhleothanh/github-workflows/.github/actions/prepare-java-maven@main
+      - name: Prepare Gradle dependencies
+        id: prepare-gradle
+        uses: thanhleothanh/github-workflows/.github/actions/prepare-gradle@main
         with:
           java-version: ${{ inputs.java-version }}
-          maven-version: ${{ inputs.maven-version }}
 
-      - name: Build Java project
-        id: build-java-maven
-        uses: thanhleothanh/github-workflows/.github/actions/build-java-maven@main
+      - name: Build project
+        id: build-gradle
+        uses: thanhleothanh/github-workflows/.github/actions/build-gradle@main
 
-      - name: Test Java project
-        id: test-java-maven
-        uses: thanhleothanh/github-workflows/.github/actions/test-java-maven@main
+      - name: Test project
+        id: test-gradle
+        uses: thanhleothanh/github-workflows/.github/actions/test-gradle@main
 
       - name: Upload build folder artifact
         uses: actions/upload-artifact@v4

@@ -1,0 +1,9 @@
+name: 'Test Gradle project'
+description: 'Run Gradle tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run tests with Gradle
+      run: ./gradlew test
+      shell: bash

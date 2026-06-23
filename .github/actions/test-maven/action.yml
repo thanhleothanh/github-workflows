@@ -1,0 +1,9 @@
+name: 'Test Maven project'
+description: 'Run Maven tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run tests with Maven
+      run: ./mvnw -B verify
+      shell: bash

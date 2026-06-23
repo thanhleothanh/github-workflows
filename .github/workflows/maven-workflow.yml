@@ -1,0 +1,69 @@
+name: Reusable Maven Workflow
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'Java version to use'
+        required: false
+        default: '17'
+        type: string
+      build-folder:
+        description: 'Build folder output'
+        required: false
+        default: 'target'
+        type: string
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare Maven dependencies
+        id: prepare-maven
+        uses: thanhleothanh/github-workflows/.github/actions/prepare-maven@main
+        with:
+          java-version: ${{ inputs.java-version }}
+
+      - name: Build project
+        id: build-maven
+        uses: thanhleothanh/github-workflows/.github/actions/build-maven@main
+
+      - name: Test project
+        id: test-maven
+        uses: thanhleothanh/github-workflows/.github/actions/test-maven@main
+
+      - name: Upload build folder artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.build-folder }}
+          path: ${{ inputs.build-folder }}
+          retention-days: 1
+
+  docker-image:
+    needs: [build-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+      github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download build folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.build-folder }}
+          path: ${{ inputs.build-folder }}
+
+      - name: Build Docker image and push
+        uses: thanhleothanh/github-workflows/.github/actions/docker-image@main
+        with:
+          secret-github-token: ${{ secrets.GITHUB_TOKEN }}

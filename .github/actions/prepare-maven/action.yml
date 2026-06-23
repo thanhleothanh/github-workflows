@@ -1,16 +1,11 @@
-name: 'Prepare Java dependencies'
-description: 'Prepare Java dependencies'
+name: 'Prepare Maven dependencies'
+description: 'Set up JDK and Maven (via Maven Wrapper) with optional custom settings.xml'
 
 inputs:
   java-version:
     description: 'Java version to use'
     required: false
     default: '17'
-    type: string
-  maven-version:
-    description: 'Maven version to use'
-    required: false
-    default: '3.8.6'
     type: string
 
 runs:
@@ -22,11 +17,6 @@ runs:
         java-version: ${{ inputs.java-version }}
         distribution: 'temurin'
         cache: 'maven'
-
-    - name: Set up Maven ${{ inputs.maven-version }}
-      uses: stCarolas/setup-maven@v4.5
-      with:
-        maven-version: ${{ inputs.maven-version }}
 
     - name: Setup custom Maven settings (if present)
       working-directory: '.'

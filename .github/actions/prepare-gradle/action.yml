@@ -1,0 +1,37 @@
+name: 'Prepare Gradle dependencies'
+description: 'Set up JDK (Gradle version managed by gradlew wrapper)'
+
+inputs:
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '17'
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up JDK ${{ inputs.java-version }}
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Setup custom Gradle configuration (if present)
+      working-directory: '.'
+      run: |
+        mkdir -p ~/.gradle/init.d
+        if [ -f "./gradle/gradle.properties" ]; then
+          echo "Custom ./gradle/gradle.properties found"
+          cp ./gradle/gradle.properties ~/.gradle/gradle.properties
+        fi
+        if [ -d "./gradle/init.d" ]; then
+          echo "Custom init scripts found in ./gradle/init.d"
+          cp ./gradle/init.d/*.gradle ~/.gradle/init.d/ 2>/dev/null || true
+        fi
+        if [ -f "./gradle/init.gradle" ]; then
+          echo "Custom ./gradle/init.gradle found"
+          cp ./gradle/init.gradle ~/.gradle/init.d/
+        fi
+      shell: bash

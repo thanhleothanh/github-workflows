@@ -1,0 +1,9 @@
+name: 'Build Gradle project'
+description: 'Build Gradle project skipping tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+      shell: bash
