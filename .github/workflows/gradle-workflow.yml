@@ -13,6 +13,16 @@ on:
         required: false
         default: 'build'
         type: string
+      infra-startup-script:
+        description: 'Path to sh script that starts infrastructure (e.g., docker compose up)'
+        required: false
+        default: ''
+        type: string
+      infra-teardown-script:
+        description: 'Path to sh script that stops infrastructure (e.g., docker compose down)'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   build-test:
@@ -20,6 +30,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Start infrastructure (if provided)
+        if: ${{ inputs.infra-startup-script != '' }}
+        run: ${{ inputs.infra-startup-script }}
+        shell: bash
 
       - name: Prepare Gradle dependencies
         id: prepare-gradle
@@ -34,6 +49,11 @@ jobs:
       - name: Test project
         id: test-gradle
         uses: thanhleothanh/github-workflows/.github/actions/test-gradle@main
+
+      - name: Stop infrastructure (if provided)
+        if: ${{ always() && inputs.infra-teardown-script != '' }}
+        run: ${{ inputs.infra-teardown-script }}
+        shell: bash
 
       - name: Upload build folder artifact
         uses: actions/upload-artifact@v7
